@@ -20,7 +20,8 @@ import java.util.UUID;
 @Controller
 public class AuthorizeController {
 
-    @Value("${github.client.id}")
+//    @Value("${github.client.id}")
+    @Value("6a312e03edabef8a3323")
     private String clientId;
     @Value("${github.client.secret}")
     private String clientSecret;

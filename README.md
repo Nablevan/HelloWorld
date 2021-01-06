@@ -8,5 +8,5 @@
 ##脚本
 flyway
 ```bash
-mvnw flyway: migrate
+mvnw flyway:migrate
 ```
