@@ -55,15 +55,19 @@
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h2><span class="glyphicon glyphicon-list" aria-hidden="true"></span>发现</h2>
             <hr>
-            <div class="media">
+            <div class="media" th:each="question: ${questions}">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object index-list-icon" src="https://avatars3.githubusercontent.com/u/35124871?v=4" alt="...">
+<!--                        <img class="media-object index-list-icon img-rounded" th:src="${question.user.avatarUrl}" alt="...">-->
+                        <img class="media-object index-list-icon img-rounded" th:src="${question.user.Avatar_url}">
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading">问题标题</h4>
-                    问题描述
+                    <h4 class="media-heading" th:text="${question.getTitle()}"></h4>
+                    <span class="index-question-text" th:text="${question.description}"></span>
+                    <span class="index-question-text" th:text="${question.viewCount} +'查看'"></span>
+                    <span class="index-question-text" th:text="${question.commentCount} +'评论'"></span>
+                    <span class="index-question-text" th:text="${question.likeCount} +'点赞'"></span>
                 </div>
             </div>
         </div>

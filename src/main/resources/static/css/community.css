@@ -12,7 +12,13 @@
     margin-bottom: 15px;
 }
 
-.index-list-icon{
+.index-list-icon {
     width: 42px;
     height: 42px;
+}
+
+.index-question-text {
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
 }
