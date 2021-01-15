@@ -55,23 +55,42 @@
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h2><span class="glyphicon glyphicon-list" aria-hidden="true"></span>发现</h2>
             <hr>
-            <div class="media" th:each="question: ${questions}">
+            <div class="media" th:each="question: ${pagination.questions}">
                 <div class="media-left">
                     <a href="#">
-<!--                        <img class="media-object index-list-icon img-rounded" th:src="${question.user.avatarUrl}" alt="...">-->
                         <img class="media-object index-list-icon img-rounded" th:src="${question.user.avatarUrl}">
                     </a>
                 </div>
                 <div class="media-body">
                     <h4 class="media-heading" th:text="${question.getTitle()}"></h4>
-                    <span class="index-question-text" th:text="${question.description}"></span>
+                    <span class="index-question-desc" th:text="${question.description}"></span>
                     <br>
-                    <span class="index-question-text" th:text="${question.viewCount} +'查看'"></span>
-                    <span class="index-question-text" th:text="${question.commentCount} +'评论'"></span>
-                    <span class="index-question-text" th:text="${question.likeCount} +'点赞'"></span>
-                    <span class="index-question-text" th:text="${#dates.format(question.gmtCreate, 'yyyy-MM-dd HH:mm')}"></span>
+                    <span class="index-question-text" th:text="${question.viewCount} +'查看 ●'"></span>
+                    <span class="index-question-text" th:text="${question.commentCount} +'评论 ●'"></span>
+                    <span class="index-question-text" th:text="${question.likeCount} +'点赞 ●'"></span>
+                    <span class="index-question-text"
+                          th:text="${#dates.format(question.gmtCreate, 'yyyy-MM-dd HH:mm')}"></span>
                 </div>
             </div>
+            <nav aria-label="Page navigation" class="page_navi">
+                <ul class="pagination">
+                    <li>
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li>
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <h3>热门问题</h3>

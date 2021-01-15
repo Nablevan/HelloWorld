@@ -22,3 +22,12 @@
     font-weight: normal;
     color: #999;
 }
+
+.index-question-desc {
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.page_navi{
+    float: right;
+}

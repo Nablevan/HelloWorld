@@ -3,6 +3,7 @@ package com.example.helloworld.demo.mapper;
 import com.example.helloworld.demo.Model.Question;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -13,6 +14,9 @@ public interface QuestionMapper {
             " VALUES ( #{title}, #{description}, #{tag}, #{gmtCreate}, #{gmtModified}, #{creator})")
     void create(Question questionModel);
 
-    @Select("select * from question")
-    List<Question> list();
+    @Select("select * from question limit #{offSet}, #{size}")
+    List<Question> list(@Param(value = "offSet") Integer offSet, @Param(value = "size") Integer size);
+
+    @Select("select count(1) from question")
+    Integer count();
 }
