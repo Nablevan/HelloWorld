@@ -22,6 +22,19 @@ public class QuestionService {
     private UserMapper userMapper;
 
     public PaginationDTO list(Integer page, Integer size) {
+        if (page < 1) {
+            page = 1;
+        }
+        Integer totalPage;
+        Integer totalCount = questionMapper.count();
+        if (totalCount / size == 0) {
+            totalPage = totalCount / size;
+        } else {
+            totalPage = totalCount / size + 1;
+        }
+        if (page > totalPage) {
+            page = totalPage;
+        }
         Integer offSet = size * (page - 1);
         List<Question> questions = questionMapper.list(offSet, size);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
@@ -34,8 +47,7 @@ public class QuestionService {
         }
         PaginationDTO paginationDTO = new PaginationDTO();
         paginationDTO.setQuestions(questionDTOList);
-        Integer totalCount = questionMapper.count();
-        paginationDTO.setPagination(totalCount, page, size);
+        paginationDTO.setPagination(totalPage, page, size);
         return paginationDTO;
     }
 }
