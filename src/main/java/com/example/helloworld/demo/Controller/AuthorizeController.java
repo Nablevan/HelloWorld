@@ -57,7 +57,7 @@ public class AuthorizeController {
             userMapper.insert(user);
             response.addCookie(new Cookie("token", token));
 //            request.getSession().setAttribute("user", githubUser);
-            System.out.println(githubUser.getName() + "首次登录");
+//            System.out.println(githubUser.getName() + "首次登录");
             return "redirect:/";    //redirect应以路径重定向，故不能redirect：index
         } else {                 //登陆失败，显示失败信息
             return "redirect:/";

@@ -31,3 +31,7 @@
 .page_navi{
     float: right;
 }
+
+.profile .section {
+    margin-top: 15px;
+}
