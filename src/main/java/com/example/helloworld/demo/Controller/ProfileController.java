@@ -1,6 +1,10 @@
 package com.example.helloworld.demo.Controller;
 
 import com.example.helloworld.demo.Model.User;
+import com.example.helloworld.demo.dto.PaginationDTO;
+import com.example.helloworld.demo.mapper.QuestionMapper;
+import com.example.helloworld.demo.service.QuestionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class ProfileController {
+    @Autowired
+    private QuestionService questionService;
+    @Autowired
+    private QuestionMapper questionMapper;
+
     @GetMapping("/profile/{action}")
     public String profile(
             HttpServletRequest request,
@@ -24,9 +33,18 @@ public class ProfileController {
         if (action == null) {
             action = "questions";
         }
+
         if ("questions".equals(action)) {
             model.addAttribute("section", "questions");
             model.addAttribute("sectionName", "我的提问");
+            Integer totalCount = questionMapper.countByUser(user.getId());
+            if (totalCount == 0){
+                model.addAttribute("totalCount", 0);
+            }else {
+                model.addAttribute("totalCount", 1);
+            }
+            PaginationDTO pagination = questionService.list(user.getId(), page, size);
+            model.addAttribute("pagination", pagination);
         }
         if ("replies".equals(action)) {
             model.addAttribute("section", "replies");
