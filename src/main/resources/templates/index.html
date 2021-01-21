@@ -25,10 +25,10 @@
                     </a>
                 </div>
                 <div class="media-body">
-                    <a th:href="@{/question/{id}(id = ${question.id})}">
-                        <h4 class="media-heading" th:text="${question.getTitle()}"></h4>
+                        <h4 class="media-heading">
+                            <a th:href="@{/question/{id}(id = ${question.id})}" th:text="${question.getTitle()}"></a>
+                        </h4>
                         <span class="index-question-desc" th:text="${question.description}"></span>
-                    </a>
                         <br>
                         <span class="index-question-text" th:text="${question.viewCount} +'查看 ●'"></span>
                         <span class="index-question-text" th:text="${question.commentCount} +'评论 ●'"></span>
