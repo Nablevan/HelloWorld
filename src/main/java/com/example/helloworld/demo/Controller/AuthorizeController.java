@@ -6,6 +6,7 @@ import com.example.helloworld.demo.Provider.GithubProvider;
 import com.example.helloworld.demo.dto.AccessTokenDTO;
 import com.example.helloworld.demo.dto.GithubUser;
 import com.example.helloworld.demo.mapper.UserMapper;
+import com.example.helloworld.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -31,7 +32,7 @@ public class AuthorizeController {
     @Autowired
     private GithubProvider githubProvider;
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
 
     @GetMapping("/callback")
@@ -52,9 +53,7 @@ public class AuthorizeController {
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setAvatarUrl(githubUser.getAvatarUrl());
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
-            userMapper.insert(user);
+            userService.createOrUpdate(user);
             response.addCookie(new Cookie("token", token));
 //            request.getSession().setAttribute("user", githubUser);
 //            System.out.println(githubUser.getName() + "首次登录");

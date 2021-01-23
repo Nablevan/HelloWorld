@@ -1,10 +1,7 @@
 package com.example.helloworld.demo.mapper;
 
 import com.example.helloworld.demo.Model.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface UserMapper {
@@ -13,10 +10,15 @@ public interface UserMapper {
     void insert(User user);
 
     @Select("select * from user where token = #{token}")
-        //#{token}表示引用形参
-    User findByToken(@Param("token") String token);             //形参不是类时，要加@Param注解
+    User findByToken(@Param("token") String token);             //#{token}表示引用形参,形参不是类时，要加@Param注解
 
     @Select("select * from user where ID = #{ID}")
     User findById(@Param("ID") Integer ID);
+
+    @Select("select * from user where ACCOUNT_ID = #{accountId}")
+    User findByAccountId(@Param("accountId") String accountId);
+
+    @Update("UPDATE user SET name=#{name}, token=#{token}, gmt_modified=#{gmtModified}, avatar_url=#{avatarUrl} WHERE ID = #{id}")
+    void update(User user);
 }
 
