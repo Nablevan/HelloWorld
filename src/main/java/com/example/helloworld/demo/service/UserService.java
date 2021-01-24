@@ -17,8 +17,11 @@ public class UserService {
             user.setGmtModified(user.getGmtCreate());
             userMapper.insert(user);
         }else { //更新
-            user.setGmtModified(System.currentTimeMillis());
-            userMapper.update(user);
+            dbUser.setGmtModified(System.currentTimeMillis());
+            dbUser.setName(user.getName());
+            dbUser.setToken(user.getToken());
+            dbUser.setAvatarUrl(user.getAvatarUrl());
+            userMapper.update(dbUser);
         }
 
     }
