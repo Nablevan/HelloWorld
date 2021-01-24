@@ -27,7 +27,7 @@ public class QuestionService {
         }
         Integer totalPage;
         Integer totalCount = questionMapper.count();
-        if (totalCount / size == 0) {
+        if (totalCount % size == 0) {
             totalPage = totalCount / size;
         } else {
             totalPage = totalCount / size + 1;
@@ -91,13 +91,17 @@ public class QuestionService {
     }
 
     public void createOrUpdate(Question question) {
-        if (question.getId() == null) {   // 新建
-            question.setGmtCreate(System.currentTimeMillis());
-            question.setGmtModified(question.getGmtCreate());
-            questionMapper.create(question);
-        }else {  // 更新
-            question.setGmtModified(System.currentTimeMillis());
-            questionMapper.update(question);
+        Question dbquestion = questionMapper.GetQuestionById(question.getId());
+        if (dbquestion != null) {
+            if (dbquestion.getCreator().equals(question.getCreator())){  //防止修改别人的问题
+                // 更新
+                question.setGmtModified(System.currentTimeMillis());
+                questionMapper.update(question);
+            }
+        }else if (question.getId() == null) {   // 新建
+                question.setGmtCreate(System.currentTimeMillis());
+                question.setGmtModified(question.getGmtCreate());
+                questionMapper.create(question);
         }
     }
 }
