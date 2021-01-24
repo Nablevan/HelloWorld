@@ -2,12 +2,15 @@ package com.example.helloworld.demo.Controller;
 
 import com.example.helloworld.demo.Model.Question;
 import com.example.helloworld.demo.Model.User;
+import com.example.helloworld.demo.dto.QuestionDTO;
 import com.example.helloworld.demo.mapper.QuestionMapper;
 import com.example.helloworld.demo.mapper.UserMapper;
+import com.example.helloworld.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -16,19 +19,32 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class PublishController {
+    @Autowired
+    private QuestionService questionService;
+
     @GetMapping("/publish")
     public String publish() {
         return "publish";
     }
 
-    @Autowired
-    private QuestionMapper questionMapper;
+    @GetMapping("/publish/{id}")
+    public String edit(@PathVariable(name = "id") Integer id, Model model) {
+        QuestionDTO question = questionService.GetQuestionById(id);
+
+        model.addAttribute("title", question.getTitle());
+        model.addAttribute("description", question.getDescription());
+        model.addAttribute("tag", question.getTag());
+        model.addAttribute("id", question.getId());
+
+        return "publish";
+    }
 
     @PostMapping("/publish")
     public String doPublish(
-            @RequestParam("title") String title,
-            @RequestParam("description") String description,
-            @RequestParam("tag") String tag,
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "id", required = false) Integer id,
             HttpServletRequest request,
             Model model
     ) {
@@ -62,9 +78,8 @@ public class PublishController {
         question.setDescription(description);
         question.setTag(tag);
         question.setCreator(user.getId());
-        question.setGmtCreate(System.currentTimeMillis());
-        question.setGmtModified(question.getGmtCreate());
-        questionMapper.create(question);
+        question.setId(id);
+        questionService.createOrUpdate(question);
         return "redirect:/";
     }
 }

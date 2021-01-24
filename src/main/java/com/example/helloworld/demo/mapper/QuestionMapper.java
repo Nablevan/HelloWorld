@@ -2,10 +2,7 @@ package com.example.helloworld.demo.mapper;
 
 import com.example.helloworld.demo.Model.Question;
 import com.example.helloworld.demo.dto.QuestionDTO;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -31,4 +28,7 @@ public interface QuestionMapper {
     List<Question> listByUser(@Param(value = "userId") Integer userId,
                               @Param(value = "offSet") Integer offSet,
                               @Param(value = "size") Integer size);
+
+    @Update("update question set TITLE=#{title}, DESCRIPTION=#{description}, gmt_modified=#{gmtModified}, TAG=#{tag} WHERE ID = #{id}")
+    void update(Question question);
 }
