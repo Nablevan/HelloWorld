@@ -1,5 +1,6 @@
 package com.example.helloworld.demo.Controller;
 
+import com.example.helloworld.demo.Model.QuestionExample;
 import com.example.helloworld.demo.Model.User;
 import com.example.helloworld.demo.dto.PaginationDTO;
 import com.example.helloworld.demo.mapper.QuestionMapper;
@@ -37,10 +38,13 @@ public class ProfileController {
         if ("questions".equals(action)) {
             model.addAttribute("section", "questions");
             model.addAttribute("sectionName", "我的提问");
-            Integer totalCount = questionMapper.countByUser(user.getId());
-            if (totalCount == 0){
+            QuestionExample questionExample = new QuestionExample();
+            questionExample.createCriteria().andIdEqualTo(user.getId());
+            Integer totalCount = (int) questionMapper.countByExample(questionExample);
+//                    Integer totalCount = questionMapper.countByUser(user.getId());
+            if (totalCount == 0) {
                 model.addAttribute("totalCount", 0);
-            }else {
+            } else {
                 model.addAttribute("totalCount", 1);
             }
             PaginationDTO pagination = questionService.list(user.getId(), page, size);
