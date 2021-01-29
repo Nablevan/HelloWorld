@@ -5,6 +5,8 @@ import com.example.helloworld.demo.Model.QuestionExample;
 import com.example.helloworld.demo.Model.User;
 import com.example.helloworld.demo.dto.PaginationDTO;
 import com.example.helloworld.demo.dto.QuestionDTO;
+import com.example.helloworld.demo.exception.CustomizeErrorCode;
+import com.example.helloworld.demo.exception.CustomizeException;
 import com.example.helloworld.demo.mapper.QuestionMapper;
 import com.example.helloworld.demo.mapper.UserMapper;
 import org.apache.ibatis.session.RowBounds;
@@ -93,6 +95,9 @@ public class QuestionService {
     public QuestionDTO GetQuestionById(Integer questionId) {
         QuestionDTO questionDTO = new QuestionDTO();
         Question question = questionMapper.selectByPrimaryKey(questionId);
+        if (question == null) {
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
 //        Question question = questionMapper.GetQuestionById(questionId);
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -109,8 +114,11 @@ public class QuestionService {
                 question.setGmtModified(System.currentTimeMillis());
                 QuestionExample example = new QuestionExample();
                 example.createCriteria().andIdEqualTo(question.getId());
-                questionMapper.updateByExampleSelective(question, example);
+                int update = questionMapper.updateByExampleSelective(question, example);
 //                questionMapper.update(question);
+                if (update != 1) {
+                    throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+                }
             }
         } else if (question.getId() == null) {   // 新建
             question.setGmtCreate(System.currentTimeMillis());
