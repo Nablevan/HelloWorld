@@ -20,6 +20,8 @@ public class QuestionController {
     public String question(@PathVariable(name = "questionId") Integer questionId,
                            Model model){
         QuestionDTO questionDTO = questionService.GetQuestionById(questionId);
+        questionService.incViewCount(questionDTO.getId());
+        questionDTO.setViewCount(questionDTO.getViewCount() + 1);
         model.addAttribute("question", questionDTO);
         return "question";
     }

@@ -7,6 +7,7 @@ import com.example.helloworld.demo.dto.PaginationDTO;
 import com.example.helloworld.demo.dto.QuestionDTO;
 import com.example.helloworld.demo.exception.CustomizeErrorCode;
 import com.example.helloworld.demo.exception.CustomizeException;
+import com.example.helloworld.demo.mapper.QuestionExtMapper;
 import com.example.helloworld.demo.mapper.QuestionMapper;
 import com.example.helloworld.demo.mapper.UserMapper;
 import org.apache.ibatis.session.RowBounds;
@@ -22,6 +23,8 @@ public class QuestionService {
 
     @Autowired
     private QuestionMapper questionMapper;
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
     @Autowired
     private UserMapper userMapper;
 
@@ -129,5 +132,12 @@ public class QuestionService {
             questionMapper.insert(question);
 //            questionMapper.create(question);
         }
+    }
+
+    public void incViewCount(Integer id) {
+        Question updateQuestion = new Question();
+        updateQuestion.setId(id);
+        updateQuestion.setViewCount(1);
+        questionExtMapper.incViewCount(updateQuestion);
     }
 }
