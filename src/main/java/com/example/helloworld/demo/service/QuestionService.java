@@ -59,7 +59,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public PaginationDTO list(Integer userId, Integer page, Integer size) {
+    public PaginationDTO list(Long userId, Integer page, Integer size) {
         if (page < 1) {
             page = 1;
         }
@@ -95,7 +95,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public QuestionDTO GetQuestionById(Integer questionId) {
+    public QuestionDTO GetQuestionById(Long questionId) {
         QuestionDTO questionDTO = new QuestionDTO();
         Question question = questionMapper.selectByPrimaryKey(questionId);
         if (question == null) {
@@ -134,7 +134,7 @@ public class QuestionService {
         }
     }
 
-    public void incViewCount(Integer id) {
+    public void incViewCount(Long id) {
         Question updateQuestion = new Question();
         updateQuestion.setId(id);
         updateQuestion.setViewCount(1);
