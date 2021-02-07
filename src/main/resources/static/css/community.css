@@ -38,3 +38,7 @@
 .error-page{
     margin: 50px;
 }
+
+.button-right{
+    float: right;
+}
