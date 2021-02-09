@@ -36,7 +36,7 @@
                           th:text="${#dates.format(question.gmtCreate, 'yyyy-MM-dd HH:mm')}"></span>
                 </div>
             </div>
-            <nav aria-label="Page navigation" class="page_navi">
+            <nav aria-label="Page navigation" class="page-navi">
                 <ul class="pagination">
                     <li th:if="${pagination.showFirstPage}">
                         <a th:href="@{'/profile/'+${section}+'/'(page=1)}" aria-label="Previous">

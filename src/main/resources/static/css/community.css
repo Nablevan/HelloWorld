@@ -28,7 +28,7 @@
     font-weight: normal;
 }
 
-.page_navi{
+.page-navi{
     float: right;
 }
 
@@ -41,4 +41,5 @@
 
 .button-right{
     float: right;
+    margin-bottom: 6px;
 }
