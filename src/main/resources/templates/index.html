@@ -10,7 +10,17 @@
     <script src="/js/jquery-3.5.1.min.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
     <script src="/js/npm.js"></script>
+    <script type="application/javascript">
+        window.onload = function () {
+            var closable = window.localStorage.getItem("closable");
+            if (closable == "true") {
+                window.close();
+                window.localStorage.removeItem("closable")
+            }
+        }
+    </script>
 </head>
+
 <body class="body">
 <div th:insert="navigation :: navbar"></div>
 <div class="container-fluid main">
@@ -25,16 +35,16 @@
                     </a>
                 </div>
                 <div class="media-body">
-                        <h4 class="media-heading">
-                            <a th:href="@{/question/{id}(id = ${question.id})}" th:text="${question.getTitle()}"></a>
-                        </h4>
-                        <span class="index-question-desc" th:text="${question.description}"></span>
-                        <br>
-                        <span class="index-question-text" th:text="${question.viewCount} +'查看 ●'"></span>
-                        <span class="index-question-text" th:text="${question.commentCount} +'评论 ●'"></span>
-                        <span class="index-question-text" th:text="${question.likeCount} +'点赞 ●'"></span>
-                        <span class="index-question-text"
-                              th:text="${#dates.format(question.gmtCreate, 'yyyy-MM-dd HH:mm')}">
+                    <h4 class="media-heading">
+                        <a th:href="@{/question/{id}(id = ${question.id})}" th:text="${question.getTitle()}"></a>
+                    </h4>
+                    <span class="index-question-desc" th:text="${question.description}"></span>
+                    <br>
+                    <span class="index-question-text" th:text="${question.viewCount} +'查看 ●'"></span>
+                    <span class="index-question-text" th:text="${question.commentCount} +'评论 ●'"></span>
+                    <span class="index-question-text" th:text="${question.likeCount} +'点赞 ●'"></span>
+                    <span class="index-question-text"
+                          th:text="${#dates.format(question.gmtCreate, 'yyyy-MM-dd HH:mm')}">
                         </span>
                 </div>
             </div>
