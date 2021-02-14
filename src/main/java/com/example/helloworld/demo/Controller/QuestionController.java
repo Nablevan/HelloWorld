@@ -1,8 +1,8 @@
 package com.example.helloworld.demo.Controller;
 
-import com.example.helloworld.demo.dto.CommentCreateDTO;
 import com.example.helloworld.demo.dto.CommentDTO;
 import com.example.helloworld.demo.dto.QuestionDTO;
+import com.example.helloworld.demo.enums.CommentTypeEnum;
 import com.example.helloworld.demo.service.CommentService;
 import com.example.helloworld.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class QuestionController {
         QuestionDTO questionDTO = questionService.GetQuestionById(questionId);
         questionService.incViewCount(questionDTO.getId());
         questionDTO.setViewCount(questionDTO.getViewCount() + 1);
-        List<CommentDTO> comments = commentService.listByQuestionId(questionId);
+        List<CommentDTO> comments = commentService.listByTargetId(questionId, CommentTypeEnum.QUESTION);
         model.addAttribute("question", questionDTO);
         model.addAttribute("comments", comments);
         return "question";

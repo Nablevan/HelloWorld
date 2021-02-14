@@ -48,6 +48,32 @@
     padding-bottom: 10px;
 }
 
+.icon-color:focus,
 .icon-color{
     color: #797979;
+    outline: 0;
+}
+
+.icon-active:hover,
+.icon-active:focus,
+.icon-active{
+    color: #2b92ec;
+}
+
+.comment-list-each{
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #e3e3e3;
+    padding-bottom: 10px;
+}
+
+.sub-comment{
+    border: #e3e3e3 1px solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+.sub-comment .comment{
+    margin-top: 10px;
 }

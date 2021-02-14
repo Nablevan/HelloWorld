@@ -59,11 +59,11 @@ public class CommentService {
         }
     }
 
-    public List<CommentDTO> listByQuestionId(Long questionId) {
+    public List<CommentDTO> listByTargetId(Long questionId, CommentTypeEnum type) {
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria()
                 .andParentIdEqualTo(questionId)
-                .andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
+                .andTypeEqualTo(type.getType());
         List<Comment> comments = commentMapper.selectByExampleWithBLOBs(commentExample);  //当检索包含大字段时，用WithBLOBs
         if (comments.size() == 0) {
             return new ArrayList<>();
@@ -71,7 +71,7 @@ public class CommentService {
 
         //获取去重的评论人
         Set<Long> commentators = comments.stream().map(comment -> comment.getCommentator()).collect(Collectors.toSet());
-        List<Long> userIds = new ArrayList();
+        List<Long> userIds = new ArrayList<Long>();
         userIds.addAll(commentators);
 
         //生成id--user的map
