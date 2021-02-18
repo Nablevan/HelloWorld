@@ -4,17 +4,17 @@
 function postComment() {
     var questionId = $("#question_id").val();
     var commentContent = $("#comment_content").val();
-    comment2target(questionId,1,commentContent);
+    comment2target(questionId, 1, commentContent);
 }
 
-function postSubComment(e){
+function postSubComment(e) {
     var id = e.getAttribute("data-id");
-    var content = $('#input-'+id).val();
+    var content = $('#input-' + id).val();
     comment2target(id, 2, content);
 }
 
-function comment2target(targetId, type, content){
-    if (!content){
+function comment2target(targetId, type, content) {
+    if (!content) {
         alert('可是，可是你不能发送不存在的东西');
         return
     }
@@ -29,6 +29,7 @@ function comment2target(targetId, type, content){
         success: function (response) {
             if (response.code == 200) {
                 $("#comment_section").hide();
+                window.location.reload();
             } else {
                 if (response.code == 2003) {
                     var isAccepted = confirm(response.message);
@@ -50,31 +51,53 @@ function comment2target(targetId, type, content){
 /**
  * 展开二级评论
  */
-function collapseComments(e){
+function collapseComments(e) {
     var id = e.getAttribute("data-id");
-    var comment = $('#comment-'+id);
-    if (comment.hasClass("in")){
+    var comment = $('#comment-' + id);
+    if (comment.hasClass("in")) {
         //折叠
         comment.removeClass("in");
         e.classList.remove("icon-active");
-    }else {
+        comment.children().not(".input-group").each(function (index, child) {
+            child.remove();
+        })
+    } else {
         //展开
-        $.getJSON( "/comment/"+id, function( data ) {  //data即为请求获取到的值
-            var commentBody = $("#comment-body-"+id);
-            // var items = [];
-            // $.each(data.data, function (comment) {
-            //     var c = $("<div/>", {
-            //         "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12 comments",
-            //         html: comment.content
-            //     });
-            //     items.push(c);
-            // });
-            //
-            // commentBody.append($("<div/>", {
-            //     "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse sub-comments",
-            //     "id": "comment-" + id,
-            //     html: items.join("")
-            // }));
+        $.getJSON("/comment/" + id, function (data) {  //data即为请求获取到的值
+            var subCommentContainer = $("#comment-" + id);
+            $.each(data.data, function (index, comment) {
+                var mediaLeftElement = $("<div/>", {
+                    "class": "media-left"
+                }).append($("<img/>", {
+                    "class": "media-object img-rounded index-list-icon",
+                    "src": comment.user.avatarUrl
+                }));
+
+                var mediaBodyElement = $("<div/>", {
+                    "class": "media-body"
+                }).append($("<h5/>", {
+                    "class": "media-heading",
+                    "html": comment.user.name
+                })).append($("<div/>", {
+                    "html": comment.content
+                })).append($("<div/>", {
+                    "class": "menu"
+                }).append($("<span/>", {
+                    "class": "pull-right",
+                    "html": moment(comment.gmtCreate).format('YYYY-MM-DD')
+                })));
+
+                var mediaElement = $("<div/>", {
+                    "class": "media"
+                }).append(mediaLeftElement).append(mediaBodyElement);
+
+                var commentElement = $("<div/>", {
+                    "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12 comments"
+                }).append(mediaElement).append($("<hr>",{"style": "margin-top : 5px"}));
+
+                subCommentContainer.prepend(commentElement);
+            });
+
             comment.addClass("in");
             e.classList.add("icon-active");
         });

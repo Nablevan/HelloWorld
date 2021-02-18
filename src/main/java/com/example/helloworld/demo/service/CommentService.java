@@ -5,10 +5,7 @@ import com.example.helloworld.demo.dto.CommentDTO;
 import com.example.helloworld.demo.enums.CommentTypeEnum;
 import com.example.helloworld.demo.exception.CustomizeErrorCode;
 import com.example.helloworld.demo.exception.CustomizeException;
-import com.example.helloworld.demo.mapper.CommentMapper;
-import com.example.helloworld.demo.mapper.QuestionExtMapper;
-import com.example.helloworld.demo.mapper.QuestionMapper;
-import com.example.helloworld.demo.mapper.UserMapper;
+import com.example.helloworld.demo.mapper.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +28,8 @@ public class CommentService {
     private QuestionExtMapper questionExtMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private CommentExtMapper commentExtMapper;
 
     @Transactional               //将方法体定义为事务
     public void insert(Comment comment) {
@@ -47,6 +46,13 @@ public class CommentService {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
             commentMapper.insert(comment);
+
+            //更新父评论的评论数
+            Comment parentComment = new Comment();
+            parentComment.setId(comment.getParentId());
+            parentComment.setCommentCount(1L);
+            commentExtMapper.incCommentCount(parentComment);
+
         } else {
             //回复问题
             Question dbQuestion = questionMapper.selectByPrimaryKey(comment.getParentId());

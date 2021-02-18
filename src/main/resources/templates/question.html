@@ -11,6 +11,7 @@
     <script src="/js/jquery-3.5.1.min.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
     <script src="/js/community.js" type="application/javascript"></script>
+    <script src="/js/moment.js"></script>
     <script src="/js/npm.js"></script>
 </head>
 <body class="body">
@@ -56,9 +57,9 @@
                     <span class="index-question-desc" th:text="${comment.content}"></span>
                     <div>
                         <button class="btn btn-xs glyphicon glyphicon-thumbs-up icon-color" type="button"
-                                th:value="' '+ ${comment.likeCount}"></button>
+                                th:text="' '+ ${comment.likeCount}"></button>
                         <button class="btn btn-xs glyphicon glyphicon-comment icon-color" type="button"
-                                th:data-id="${comment.id}" onclick="collapseComments(this)"> 5
+                                th:data-id="${comment.id}" th:text="' '+ ${comment.commentCount}" onclick="collapseComments(this)">
                         </button>
                         <span class="index-question-text pull-right"
                               th:text="${#dates.format(comment.gmtCreate, 'yyyy-MM-dd')}">
@@ -66,25 +67,25 @@
                     </div>
                     <!--                    二级评论-->
                     <div class="sub-comment collapse" th:id="${'comment-'+comment.id}">
-                        <div class="media comment-list-each" th:each="comment:${comments}">
-                            <div class="media-left ">
-                                <a href="#">
-                                    <img class="media-object index-list-icon img-rounded"
-                                         th:src="${comment.user.getAvatarUrl()}">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <a th:href="@{/profile}">
-                                    <h4 class="index-question-desc" th:text="${comment.user.getName()}"></h4>
-                                </a>
-                                <span class="index-question-desc" th:text="${comment.content}"></span>
-                                <div>
-                                    <span class="index-question-text pull-right"
-                                          th:text="${#dates.format(comment.gmtCreate, 'yyyy-MM-dd')}">
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+<!--                        <div class="media comment-list-each" th:each="comment:${comments}">-->
+<!--                            <div class="media-left ">-->
+<!--                                <a href="#">-->
+<!--                                    <img class="media-object index-list-icon img-rounded"-->
+<!--                                         th:src="${comment.user.getAvatarUrl()}">-->
+<!--                                </a>-->
+<!--                            </div>-->
+<!--                            <div class="media-body">-->
+<!--                                <a th:href="@{/profile}">-->
+<!--                                    <h4 class="index-question-desc" th:text="${comment.user.getName()}"></h4>-->
+<!--                                </a>-->
+<!--                                <span class="index-question-desc" th:text="${comment.content}"></span>-->
+<!--                                <div>-->
+<!--                                    <span class="index-question-text pull-right"-->
+<!--                                          th:text="${#dates.format(comment.gmtCreate, 'yyyy-MM-dd')}">-->
+<!--                                    </span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
                         <div class="input-group comment">
                             <input type="text" class="form-control" placeholder="输入回复" th:id="${'input-'+comment.id}">
                             <span class="input-group-btn">
