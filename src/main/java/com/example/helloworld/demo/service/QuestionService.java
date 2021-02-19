@@ -14,9 +14,13 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -43,7 +47,9 @@ public class QuestionService {
             page = totalPage;
         }
         Integer offSet = size * (page - 1);
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offSet, size));
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.setOrderByClause("gmt_create desc");
+        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offSet, size));
 //        List<Question> questions = questionMapper.list(offSet, size);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questions) {
@@ -139,5 +145,28 @@ public class QuestionService {
         updateQuestion.setId(id);
         updateQuestion.setViewCount(1);
         questionExtMapper.incViewCount(updateQuestion);
+    }
+
+    public List<QuestionDTO> selectRelated(QuestionDTO questionDTO) {
+        if (StringUtils.isEmpty(questionDTO.getTag())){
+            return new ArrayList<>();
+        }
+        String[] tags = StringUtils.split(questionDTO.getTag(), ",");
+        String tagRegexp = Arrays.stream(tags).collect(Collectors.joining("|"));
+        Question question = new Question();
+        question.setId(questionDTO.getId());
+        question.setTag(tagRegexp);
+
+        List<Question> questions = questionExtMapper.selectRelated(question);
+        List<QuestionDTO> questionDTOS = questions.stream().map(q -> {
+            QuestionDTO dto = new QuestionDTO();
+            BeanUtils.copyProperties(q, dto);
+            return dto;
+        }).collect(Collectors.toList());
+
+        if (questionDTOS.size()>5){
+            questionDTOS = questionDTOS.subList(0, 10);
+        }
+        return questionDTOS;
     }
 }

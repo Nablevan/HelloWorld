@@ -71,7 +71,7 @@ public class PublishController {
             model.addAttribute("error", "标签不能为空");
             return "publish";
         }
-
+        tag = tag.replace("，", ",");
 
         Question question = new Question();
         question.setTitle(title);

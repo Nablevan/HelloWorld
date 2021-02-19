@@ -27,9 +27,11 @@ public class QuestionController {
         QuestionDTO questionDTO = questionService.GetQuestionById(questionId);
         questionService.incViewCount(questionDTO.getId());
         questionDTO.setViewCount(questionDTO.getViewCount() + 1);
+        List<QuestionDTO> relatedQuestions = questionService.selectRelated(questionDTO);
         List<CommentDTO> comments = commentService.listByTargetId(questionId, CommentTypeEnum.QUESTION);
         model.addAttribute("question", questionDTO);
         model.addAttribute("comments", comments);
+        model.addAttribute("relatedQuestions", relatedQuestions);
         return "question";
     }
 }

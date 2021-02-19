@@ -93,7 +93,7 @@ function collapseComments(e) {
 
                 var commentElement = $("<div/>", {
                     "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12 comments"
-                }).append(mediaElement).append($("<hr>",{"style": "margin-top : 5px"}));
+                }).append(mediaElement).append($("<hr>", {"style": "margin-top : 5px"}));
 
                 subCommentContainer.prepend(commentElement);
             });
