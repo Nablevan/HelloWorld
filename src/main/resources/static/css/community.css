@@ -81,3 +81,36 @@
 .hr-margin{
     margin: 5px 0;
 }
+
+.point{
+    cursor: pointer;
+}
+
+.selectTag{
+    display: none;
+}
+
+.selectTag .show{
+    display: block;
+    border: #e3e3e3 1px solid;
+    border-radius: 5px;
+}
+
+.selectTag-border {
+    border: #cacaca 1px solid;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.nav-tag{
+    font-size: 11px;
+    color: #646464;
+}
+.nav-tag a{
+    color: #646464;
+    padding: 5px !important;
+}
+
+.nav-tag tab-div{
+    margin: 5px 0;
+}

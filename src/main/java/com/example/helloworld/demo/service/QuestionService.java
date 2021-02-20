@@ -50,7 +50,6 @@ public class QuestionService {
         QuestionExample questionExample = new QuestionExample();
         questionExample.setOrderByClause("gmt_create desc");
         List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offSet, size));
-//        List<Question> questions = questionMapper.list(offSet, size);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questions) {
             User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -73,7 +72,6 @@ public class QuestionService {
         QuestionExample example = new QuestionExample();
         example.createCriteria().andCreatorEqualTo(userId);
         Integer totalCount = (int) questionMapper.countByExample(example);
-//        Integer totalCount = questionMapper.countByUser(userId);
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
         } else {
@@ -86,7 +84,6 @@ public class QuestionService {
         QuestionExample example1 = new QuestionExample();
         example1.createCriteria().andCreatorEqualTo(userId);
         List<Question> questions = questionMapper.selectByExampleWithRowbounds(example1, new RowBounds(offSet,size));
-//        List<Question> questions = questionMapper.listByUser(userId, offSet, size);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questions) {
             User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -107,7 +104,6 @@ public class QuestionService {
         if (question == null) {
             throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
-//        Question question = questionMapper.GetQuestionById(questionId);
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
         questionDTO.setUser(user);
@@ -116,7 +112,6 @@ public class QuestionService {
 
     public void createOrUpdate(Question question) {
         Question dbquestion = questionMapper.selectByPrimaryKey(question.getId());
-//        Question dbquestion = questionMapper.GetQuestionById(question.getId());
         if (dbquestion != null) {
             if (dbquestion.getCreator().equals(question.getCreator())) {  //防止修改别人的问题
                 // 更新
@@ -124,7 +119,6 @@ public class QuestionService {
                 QuestionExample example = new QuestionExample();
                 example.createCriteria().andIdEqualTo(question.getId());
                 int update = questionMapper.updateByExampleSelective(question, example);
-//                questionMapper.update(question);
                 if (update != 1) {
                     throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
                 }
@@ -136,7 +130,6 @@ public class QuestionService {
             question.setViewCount(0);
             question.setLikeCount(0);
             questionMapper.insert(question);
-//            questionMapper.create(question);
         }
     }
 

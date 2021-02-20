@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/community.css">
     <script src="/js/jquery-3.5.1.min.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="/js/community.js"></script>
 </head>
 <body class="body">
 <div th:insert="navigation :: navbar"></div>
@@ -22,17 +23,42 @@
                 <div class="form-group">
                     <label for="title">问题标题（简单扼要）：</label>
                     <input type="text" class="form-control" id="title" name="title" th:value="${title}"
-                           placeholder="问题标题...">
+                           placeholder="问题标题..." autocomplete="off">
                 </div>
                 <div class="form-group">
                     <label for="description">问题补充（必填，请参照右侧提示）：</label>
                     <textarea class="form-control" name="description" id="description" rows="3"
-                              th:text="${description}"></textarea>
+                              th:text="${description}" autocomplete="off"></textarea>
                 </div>
-                <div class="form-group">
+                <div id="addTag" class="form-group">
                     <label for="tag">添加标签：</label>
                     <input type="text" class="form-control" id="tag" name="tag" th:value="${tag}"
-                           placeholder="输入标签，以“，”分隔...">
+                           placeholder="输入标签，以“，”分隔..." autocomplete="off" onclick="showSelectTag()">
+                    <br>
+                    <div id="selectTag" class="selectTag-border selectTag" tabindex="0">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs nav-tag" role="tablist">
+                            <li role="presentation" class="active">
+                                <a href="#home" aria-controls="home" role="tab" data-toggle="tab">开发语言</a>
+                            </li>
+                            <li role="presentation">
+                                <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">平台框架</a>
+                            </li>
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content tab-div">
+                            <div role="tabpanel" class="tab-pane active" id="home">
+                                <span class="label label-info glyphicon glyphicon-tags point" onclick="selectTag(this)"
+                                      th:text="' '+Java"></span>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="profile">
+                                <span class="label label-info glyphicon glyphicon-tags point" onclick="selectTag(this)"
+                                      th:text="' '+Spring"></span>
+                                <span class="label label-info glyphicon glyphicon-tags point" onclick="selectTag(this)"
+                                      th:text="' '+Spring+' '+boot"></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <span class="alert alert-danger" th:if="${error}" th:text="${error}"></span>
                 <button type="submit" class="btn btn-success btn-publish">提交</button>
