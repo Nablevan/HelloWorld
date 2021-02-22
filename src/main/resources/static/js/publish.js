@@ -2,6 +2,7 @@ $(document).ready(function(){
     $("#addTag").mouseleave(function(){
         hideSelectTag();
     });
+    $("#开发语言").addClass("active");
 });
 
 function showSelectTag(){

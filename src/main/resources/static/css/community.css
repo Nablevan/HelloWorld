@@ -82,8 +82,14 @@
     margin: 5px 0;
 }
 
+.tag-div{
+    display: inline;
+}
+
 .point{
     cursor: pointer;
+    margin: 5px;
+    float: left;
 }
 
 .selectTag{

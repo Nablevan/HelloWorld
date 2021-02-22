@@ -35,39 +35,23 @@
                     <label for="tag">添加标签：</label>
                     <input type="text" class="form-control" id="tag" name="tag" th:value="${tag}"
                            placeholder="输入标签，以“，”分隔..." autocomplete="off" onclick="showSelectTag()">
-                    <br>
-                    <div id="selectTag" class="selectTag-border selectTag show">
+
+                    <div id="selectTag" class="selectTag-border selectTag col-lg-3 col-md-3 col-sm-3 col-xs-3">
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs nav-tag" role="tablist">
-                            <li role="presentation" th:each="nav: ${tags}">
+                            <li role="presentation" th:each="nav: ${tags}" th:id="${nav.getCategoryName()}">
                                 <a th:href="${'#' + nav.getCategoryName()}" aria-controls="home" role="tab"
                                    data-toggle="tab" th:text="${nav.getCategoryName()}"></a>
                             </li>
-                            <!--                            <li role="presentation" class="active">-->
-                            <!--                                <a href="#home" aria-controls="home" role="tab" data-toggle="tab">开发语言</a>-->
-                            <!--                            </li>-->
-                            <!--                            <li role="presentation">-->
-                            <!--                                <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">平台框架</a>-->
-                            <!--                            </li>-->
                         </ul>
                         <!-- Tab panes -->
-                        <div class="tab-content tab-div">
+                        <div class="tab-content tab-div ">
                             <div role="tabpanel" class="tab-pane" th:id="${nav.getCategoryName()}" th:each="nav: ${tags}">
-                                <span class="label label-info glyphicon glyphicon-tags point" onclick="selectTag(this)"
-                                      th:each="tag: ${nav.getTags()}" th:text="' '+${tag}"></span>
-<!--                                <span class="label label-info glyphicon glyphicon-tags point" onclick="selectTag(this)"-->
-<!--                                      th:text="' '+Java"></span>-->
+                                <div class="tag-div" th:each="tag: ${nav.getTags()}">
+                                    <span class="label label-info glyphicon glyphicon-tags point" onclick="selectTag(this)"
+                                          th:text="' '+${tag}"></span>
+                                </div>
                             </div>
-<!--                            <div role="tabpanel" class="tab-pane active" id="home">-->
-<!--                                <span class="label label-info glyphicon glyphicon-tags point" onclick="selectTag(this)"-->
-<!--                                      th:text="' '+Java"></span>-->
-<!--                            </div>-->
-<!--                            <div role="tabpanel" class="tab-pane active" id="profile">-->
-<!--                                <span class="label label-info glyphicon glyphicon-tags point" onclick="selectTag(this)"-->
-<!--                                      th:text="' '+Spring"></span>-->
-<!--                                <span class="label label-info glyphicon glyphicon-tags point" onclick="selectTag(this)"-->
-<!--                                      th:text="' '+Spring+' '+boot"></span>-->
-<!--                            </div>-->
                         </div>
                     </div>
                 </div>
