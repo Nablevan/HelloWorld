@@ -120,3 +120,11 @@
 .nav-tag tab-div{
     margin: 5px 0;
 }
+
+.notification-back{
+    background-color: #d72d2d;
+}
+
+.notification{
+    color: #d72d2d;
+}

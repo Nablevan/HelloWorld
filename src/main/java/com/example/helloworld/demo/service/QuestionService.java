@@ -14,7 +14,6 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -32,16 +31,16 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
-    public PaginationDTO list(Integer page, Integer size) {
+    public PaginationDTO<QuestionDTO> list(Integer page, Integer size) {
         if (page < 1) {
             page = 1;
         }
         Integer totalPage;
-        Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
-        if (totalCount % size == 0) {
-            totalPage = totalCount / size;
+        Integer targetCount = (int) questionMapper.countByExample(new QuestionExample());
+        if (targetCount % size == 0) {
+            totalPage = targetCount / size;
         } else {
-            totalPage = totalCount / size + 1;
+            totalPage = targetCount / size + 1;
         }
         if (page > totalPage) {
             page = totalPage;
@@ -58,24 +57,25 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
         }
-        PaginationDTO paginationDTO = new PaginationDTO();
-        paginationDTO.setQuestions(questionDTOList);
-        paginationDTO.setPagination(totalPage, page, size);
+        PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<QuestionDTO>();
+        paginationDTO.setTargetDTO(questionDTOList);
+        paginationDTO.setPagination(totalPage, page);
+        paginationDTO.setTargetCount(targetCount);
         return paginationDTO;
     }
 
-    public PaginationDTO list(Long userId, Integer page, Integer size) {
+    public PaginationDTO<QuestionDTO> list(Long userId, Integer page, Integer size) {
         if (page < 1) {
             page = 1;
         }
         Integer totalPage;
         QuestionExample example = new QuestionExample();
         example.createCriteria().andCreatorEqualTo(userId);
-        Integer totalCount = (int) questionMapper.countByExample(example);
-        if (totalCount % size == 0) {
-            totalPage = totalCount / size;
+        Integer targetCount = (int) questionMapper.countByExample(example);
+        if (targetCount % size == 0) {
+            totalPage = targetCount / size;
         } else {
-            totalPage = totalCount / size + 1;
+            totalPage = targetCount / size + 1;
         }
         if (page > totalPage) {
             page = totalPage;
@@ -92,9 +92,11 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
         }
-        PaginationDTO paginationDTO = new PaginationDTO();
-        paginationDTO.setQuestions(questionDTOList);
-        paginationDTO.setPagination(totalPage, page, size);
+        PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO<QuestionDTO>();
+        paginationDTO.setTargetDTO(questionDTOList);
+        paginationDTO.setPagination(totalPage, page);
+        paginationDTO.setTargetCount(targetCount);
+
         return paginationDTO;
     }
 

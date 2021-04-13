@@ -6,6 +6,7 @@ import com.example.helloworld.demo.dto.PaginationDTO;
 import com.example.helloworld.demo.dto.QuestionDTO;
 import com.example.helloworld.demo.mapper.QuestionMapper;
 import com.example.helloworld.demo.mapper.UserMapper;
+import com.example.helloworld.demo.service.NotificationService;
 import com.example.helloworld.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,13 +23,23 @@ public class IndexController {
 
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping("/")
     public String index(HttpServletRequest request, Model model,
                         @RequestParam(name = "page", defaultValue = "1") Integer page,
                         @RequestParam(name = "size", defaultValue = "5") Integer size) {
-        PaginationDTO pagination = questionService.list(page, size);
+        PaginationDTO<QuestionDTO> pagination = questionService.list(page, size);
         model.addAttribute("pagination", pagination);
+
+        //未读通知数
+        User user = (User) request.getSession().getAttribute("user");
+        if (user != null) {
+            long notificationCount = notificationService.unReadNotificationCount(user.getId());
+            model.addAttribute("notificationCount", notificationCount);
+        }
+
         return "index";
     }
 }

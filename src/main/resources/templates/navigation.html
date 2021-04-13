@@ -25,6 +25,9 @@
                     <li th:if="${session.user}">
                         <a href="/publish">发布</a>
                     </li>
+                    <li th:if="${session.user}">
+                        <a href="/profile/replies">通知<span class="badge notification-back" th:text="${notificationCount}"></span></a>
+                    </li>
                     <li th:if="${session.user == null}">
                         <a href="https://github.com/login/oauth/authorize?client_id=6a312e03edabef8a3323&redirect_uri=http://localhost:8080/callback&scope=user&state=666">登录</a>
                     </li>
