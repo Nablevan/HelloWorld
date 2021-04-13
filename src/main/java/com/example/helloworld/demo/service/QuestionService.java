@@ -146,7 +146,10 @@ public class QuestionService {
         if (StringUtils.isEmpty(questionDTO.getTag())){
             return new ArrayList<>();
         }
-        String[] tags = StringUtils.split(questionDTO.getTag(), ",");
+        String[] tags = StringUtils.split(questionDTO.getTag(), ",");//只有一个tag时，会返回null
+        if (tags == null) {
+            tags = new String[] {questionDTO.getTag()};
+        }
         String tagRegexp = Arrays.stream(tags).collect(Collectors.joining("|"));
         Question question = new Question();
         question.setId(questionDTO.getId());
