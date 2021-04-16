@@ -5,6 +5,7 @@ import com.example.helloworld.demo.Model.QuestionExample;
 import com.example.helloworld.demo.Model.User;
 import com.example.helloworld.demo.dto.PaginationDTO;
 import com.example.helloworld.demo.dto.QuestionDTO;
+import com.example.helloworld.demo.dto.QuestionQueryDTO;
 import com.example.helloworld.demo.exception.CustomizeErrorCode;
 import com.example.helloworld.demo.exception.CustomizeException;
 import com.example.helloworld.demo.mapper.QuestionExtMapper;
@@ -31,12 +32,26 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
-    public PaginationDTO<QuestionDTO> list(Integer page, Integer size) {
+    public PaginationDTO<QuestionDTO> list(Integer page, Integer size, String search) {
         if (page < 1) {
             page = 1;
         }
         Integer totalPage;
-        Integer targetCount = (int) questionMapper.countByExample(new QuestionExample());
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+
+        if (!StringUtils.isEmpty(search)) {//如果search有值
+            if (search.toCharArray().length > 20) {
+                search = search.substring(0, 20);
+            }
+            String[] searchs = StringUtils.split(search, " ");//无法分割时，会返回null
+            if (searchs == null) {
+                searchs = new String[]{search};
+            }
+            String searchRegexp = Arrays.stream(searchs).collect(Collectors.joining("|"));
+            questionQueryDTO.setSearch(searchRegexp);
+        }
+
+        Integer targetCount = questionExtMapper.countBySearch(questionQueryDTO);
         if (targetCount % size == 0) {
             totalPage = targetCount / size;
         } else {
@@ -46,9 +61,14 @@ public class QuestionService {
             page = totalPage;
         }
         Integer offSet = size * (page - 1);
-        QuestionExample questionExample = new QuestionExample();
-        questionExample.setOrderByClause("gmt_create desc");
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offSet, size));
+
+//        QuestionExample questionExample = new QuestionExample();
+//        questionExample.setOrderByClause("gmt_create desc");
+//        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offSet, size));
+
+        questionQueryDTO.setPage(offSet);
+        questionQueryDTO.setSize(size);
+        List<Question> questions = questionExtMapper.selectBySearch(questionQueryDTO);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questions) {
             User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -83,7 +103,7 @@ public class QuestionService {
         Integer offSet = size * (page - 1);
         QuestionExample example1 = new QuestionExample();
         example1.createCriteria().andCreatorEqualTo(userId);
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(example1, new RowBounds(offSet,size));
+        List<Question> questions = questionMapper.selectByExampleWithRowbounds(example1, new RowBounds(offSet, size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questions) {
             User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -143,12 +163,12 @@ public class QuestionService {
     }
 
     public List<QuestionDTO> selectRelated(QuestionDTO questionDTO) {
-        if (StringUtils.isEmpty(questionDTO.getTag())){
+        if (StringUtils.isEmpty(questionDTO.getTag())) {
             return new ArrayList<>();
         }
         String[] tags = StringUtils.split(questionDTO.getTag(), ",");//只有一个tag时，会返回null
         if (tags == null) {
-            tags = new String[] {questionDTO.getTag()};
+            tags = new String[]{questionDTO.getTag()};
         }
         String tagRegexp = Arrays.stream(tags).collect(Collectors.joining("|"));
         Question question = new Question();
@@ -162,7 +182,7 @@ public class QuestionService {
             return dto;
         }).collect(Collectors.toList());
 
-        if (questionDTOS.size()>5){
+        if (questionDTOS.size() > 5) {
             questionDTOS = questionDTOS.subList(0, 10);
         }
         return questionDTOS;
