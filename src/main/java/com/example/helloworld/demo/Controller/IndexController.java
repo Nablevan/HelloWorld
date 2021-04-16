@@ -33,13 +33,6 @@ public class IndexController {
         PaginationDTO<QuestionDTO> pagination = questionService.list(page, size);
         model.addAttribute("pagination", pagination);
 
-        //未读通知数
-        User user = (User) request.getSession().getAttribute("user");
-        if (user != null) {
-            long notificationCount = notificationService.unReadNotificationCount(user.getId());
-            model.addAttribute("notificationCount", notificationCount);
-        }
-
         return "index";
     }
 }

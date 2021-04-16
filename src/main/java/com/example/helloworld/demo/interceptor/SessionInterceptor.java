@@ -3,6 +3,7 @@ package com.example.helloworld.demo.interceptor;
 import com.example.helloworld.demo.Model.User;
 import com.example.helloworld.demo.Model.UserExample;
 import com.example.helloworld.demo.mapper.UserMapper;
+import com.example.helloworld.demo.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -18,6 +19,8 @@ public class SessionInterceptor implements HandlerInterceptor {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -31,6 +34,9 @@ public class SessionInterceptor implements HandlerInterceptor {
                     List<User> user = userMapper.selectByExample(userExample);
                     if (user.size() != 0) {
                         request.getSession().setAttribute("user", user.get(0));
+                        //未读通知数
+                        long notificationCount = notificationService.unReadNotificationCount(user.get(0).getId());
+                        request.getSession().setAttribute("notificationCount", notificationCount);
                     }
 //                    System.out.println("found " + user.getName());
                     break;
